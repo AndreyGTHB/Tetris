@@ -47,9 +47,13 @@ class TileTestDrive:
                      ]
 
         tile.draw(50, "green")
-        tile.clear()
+        window.update()
+        time.sleep(2)
 
-        window.mainloop()
+        tile.clear()
+        window.update()
+        time.sleep(2)
+
 
 
 tester = TileTestDrive()

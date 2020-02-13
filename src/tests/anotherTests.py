@@ -41,8 +41,8 @@ class OrderPage:
         self.field2.pack()
 
     def info(self, event):
-        print("Email for info:" + self.field1.get())
-        print("Comment for order:" + self.field2.get(1.0, END))
+        print("Email for info: " + self.field1.get())
+        print("Comment for order: " + self.field2.get(1.0, END))
 
 
 order = OrderPage()

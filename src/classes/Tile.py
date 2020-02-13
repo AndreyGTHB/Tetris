@@ -50,3 +50,4 @@ class Tile:
         for tile_id in self.tile_ids:
             self.canvas.delete(tile_id)
 
+
