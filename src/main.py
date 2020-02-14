@@ -6,11 +6,16 @@ window = Tk()
 window.title("Tetris")
 
 
-width = 550
-height = 600
-c = Canvas(window, width=width, height=height)
+WIDTH = 550
+HEIGHT = 600
+c = Canvas(window, width=WIDTH, height=HEIGHT)
 c.pack()
 
-background = c.create_rectangle(0, 0, width, height, fill="blue")
+background = c.create_rectangle(0, 0, WIDTH, HEIGHT, fill="lightblue")
+
+tile_size = 50
+
+window.mainloop()
+
 
 

@@ -39,14 +39,14 @@ class TileTestDrive:
         c = Canvas(width=550, height=600)
         c.pack()
 
-        tile = Tile(c, "sq")
+        tile = Tile(c, "sq", 50)
         tile.body = [Point(0, 0),
                      Point(1, 0),
                      Point(0, 1),
                      Point(1, 1)
                      ]
 
-        tile.draw(50, "green")
+        tile.draw("green")
         window.update()
         time.sleep(2)
 
@@ -54,6 +54,15 @@ class TileTestDrive:
         window.update()
         time.sleep(2)
 
+        tile.draw("lightgreen")
+        window.update()
+        time.sleep(1)
+        tile.fall()
+        window.update()
+
+        window.bind_all('<Key>', tile.move)
+
+        window.mainloop()
 
 
 tester = TileTestDrive()
