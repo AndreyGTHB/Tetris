@@ -1,8 +1,8 @@
-from classes.Tile import Tile
+from Tile import *
 from tkinter import *
 import time
 
-from classes.Point import Point
+from Point import Point
 
 
 class TileTestDrive:
@@ -23,7 +23,7 @@ class TileTestDrive:
             print("Test 2 failed")
 
         tile = Tile("sq")
-        if tile.body[2].x == 0 and tile.bodyp[2].y == -1:
+        if tile.body[2].x == 0 and tile.body[2].y == -1:
             print("Test 3 completed")
         else:
             print("Test 3 failed")
@@ -39,7 +39,22 @@ class TileTestDrive:
         c = Canvas(width=550, height=600)
         c.pack()
 
-        tile = Tile(c, "sq", 50)
+        field = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+
+        tile = Tile(window, field, c, "sq", 50)
         tile.body = [Point(0, 0),
                      Point(1, 0),
                      Point(0, 1),
@@ -62,7 +77,9 @@ class TileTestDrive:
 
         window.bind_all('<Key>', tile.move)
 
-        window.mainloop()
+        for n in range(5):
+            tile.fall()
+            sleep(1)
 
 
 tester = TileTestDrive()
