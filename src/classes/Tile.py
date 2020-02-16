@@ -1,7 +1,7 @@
 from tkinter import *
 from time import sleep
 
-from Point import *
+from classes.Point import *
 
 
 class Tile:

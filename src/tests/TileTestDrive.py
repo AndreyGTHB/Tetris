@@ -1,8 +1,8 @@
-from Tile import *
+from classes.Tile import *
 from tkinter import *
 import time
 
-from Point import Point
+from classes.Point import Point
 
 
 class TileTestDrive:
