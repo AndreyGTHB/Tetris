@@ -39,22 +39,8 @@ class TileTestDrive:
         c = Canvas(width=550, height=600)
         c.pack()
 
-        field = [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
 
-        tile = Tile(window, field, c, "sq", 50)
+        tile = Tile(c, "sq", 50)
         tile.body = [Point(0, 0),
                      Point(1, 0),
                      Point(0, 1),
@@ -75,13 +61,43 @@ class TileTestDrive:
         tile.fall()
         window.update()
 
-        window.bind_all('<Key>', tile.move)
+    def test_col(self):
+        window = Tk()
+        window.title("CollisionTest")
+        c = Canvas(width=550, height=600)
+        c.pack()
 
-        for n in range(5):
-            tile.fall()
-            sleep(1)
+        tile = Tile(c, "ltr", 50)
+
+        field = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+
+        tile.fall()
+        window.update()
+        sleep(1)
+        tile.fall()
+        window.update()
+        sleep(1)
+
+        print(tile.collision(field))
+
+
+
+
 
 
 tester = TileTestDrive()
 
-tester.test_draw()
+tester.test_col()
