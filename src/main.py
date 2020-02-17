@@ -7,7 +7,7 @@ from classes.Tile import Tile
 window = Tk()
 window.title("Tetris")
 
-WIDTH = 550
+WIDTH = 500
 HEIGHT = 600
 c = Canvas(window, width=WIDTH, height=HEIGHT)
 c.pack()
@@ -39,7 +39,7 @@ def eventListener(event):
     global tile
 
     if event.keysym == "Right" or event.keysym == "Left":
-        tile.move(event)
+        tile.move(event, field)
 
 
 def drawField():
@@ -64,9 +64,6 @@ def tick():
         tile.clear()
         drawField()
         tile = Tile(c, choice(shapes), tile_size)
-
-    for coords in tile.body:
-        print(coords.y)
 
     t = Timer(0.6, tick)
     t.start()

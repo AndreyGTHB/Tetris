@@ -64,22 +64,43 @@ class Tile:
             self.body[i].y += 1
             self.canvas.move(self.tile_ids[i], 0, self.cellLen)
 
-    def move(self, event):
-        rightWall = False
-        leftWall = False
+    def mayMoveL(self, field):
         for coord in self.body:
-            if coord.x == 10:
-                rightWall = True
-                break
-            elif coord.x == 0:
-                leftWall = True
-                break
+            if coord.x == 0:
+                return False
 
-        if event.keysym == "Right" and not rightWall:
+        for str in range(len(field)):
+            ys = field[str]
+            for t in self.body:
+                if t.y == str and ys[t.x] - 1 == 1:
+                    return False
+
+        return True
+
+    def mayMoveR(self, field):
+        for coord in self.body:
+            if coord.x == 9:
+                return False
+
+        for str in range(len(field)):
+            ys = field[str]
+            for t in self.body:
+                if t.y == str and ys[t.x] + 1 == 1:
+                    return False
+
+        return True
+
+    def move(self, event, field):
+        obR = not self.mayMoveR(field)
+        obL = not self.mayMoveL(field)
+
+        print("r:", obR, "l:", obL)
+
+        if event.keysym == "Right" and not obR:
             for i in range(len(self.body)):
                 self.body[i].x += 1
                 self.canvas.move(self.tile_ids[i], self.cellLen, 0)
-        elif event.keysym == "Left" and not leftWall:
+        elif event.keysym == "Left" and not obL:
             for i in range(len(self.body)):
                 self.body[i].x -= 1
                 self.canvas.move(self.tile_ids[i], -self.cellLen, 0)
