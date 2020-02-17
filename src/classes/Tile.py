@@ -68,7 +68,7 @@ class Tile:
         rightWall = False
         leftWall = False
         for coord in self.body:
-            if coord.x == 11:
+            if coord.x == 10:
                 rightWall = True
                 break
             elif coord.x == 0:
@@ -88,6 +88,8 @@ class Tile:
         for i in range(len(field)):
             for block in self.body:
                 if block.y + 1 == i and field[i][block.x] == 1:
+                    return True
+                elif block.y >= 11:
                     return True
 
         return False

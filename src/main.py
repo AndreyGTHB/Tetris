@@ -1,6 +1,6 @@
 from tkinter import *
-from time import sleep
 from random import choice
+from threading import Timer
 
 from classes.Tile import Tile
 
@@ -13,8 +13,6 @@ c = Canvas(window, width=WIDTH, height=HEIGHT)
 c.pack()
 
 background = c.create_rectangle(0, 0, WIDTH, HEIGHT, fill="lightblue")
-
-window.update()
 
 tile_size = 50
 
@@ -43,21 +41,22 @@ def eventListener(event):
     if event.keysym == "Right" or event.keysym == "Left":
         tile.move(event)
 
-    window.update()
-
 
 def drawField():
-    for y in range(len(field)):
+    for i_y in range(len(field)):
+        y = field[i_y]
         for x in range(len(y)):
-            if field[y][x] == 1:
-                c.create_rectangle(tile_size * x, tile_size * y, tile_size * (x + 1), tile_size * (y + 1), \
+            if field[i_y][x] == 1:
+                c.create_rectangle(tile_size * x, tile_size * i_y, tile_size * (x + 1), tile_size * (i_y + 1), \
                                    fill="orange")
-    window.update()
 
 
 window.bind_all("<Key>", eventListener)
 
-while True:
+
+def tick():
+    global tile
+
     tile.fall()
     if tile.collision(field):
         for coord in tile.body:
@@ -66,5 +65,12 @@ while True:
         drawField()
         tile = Tile(c, choice(shapes), tile_size)
 
-    window.update()
-    sleep(1)
+    for coords in tile.body:
+        print(coords.y)
+
+    t = Timer(0.6, tick)
+    t.start()
+
+
+tick()
+window.mainloop()
