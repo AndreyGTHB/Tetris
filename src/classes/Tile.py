@@ -1,5 +1,6 @@
 from tkinter import *
 from time import sleep
+from abc import abstractmethod
 
 from classes.Point import *
 

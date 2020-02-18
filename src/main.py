@@ -2,7 +2,7 @@ from tkinter import *
 from random import choice
 from threading import Timer
 
-from classes.Tile import Tile
+from classes.Prg import *
 
 window = Tk()
 window.title("Tetris")
@@ -32,7 +32,7 @@ field = [
 ]
 
 shapes = ['sq', 'ltr', 'ln', 'prg']
-tile = Tile(c, choice(shapes), tile_size)
+tile = Prg(c, tile_size)
 
 
 def eventListener(event):
@@ -40,6 +40,8 @@ def eventListener(event):
 
     if event.keysym == "Right" or event.keysym == "Left":
         tile.move(event, field)
+    elif event.keysym == "Space":
+        tile.rotate()
 
 
 def drawField():
@@ -62,11 +64,11 @@ def tick():
             field[coord.y][coord.x] = 1
         tile.clear()
         drawField()
-        tile = Tile(c, choice(shapes), tile_size)
+        tile = Prg(c, tile_size)
 
     tile.fall()
 
-    t = Timer(0.6, tick)
+    t = Timer(0.7, tick)
     t.start()
 
 
