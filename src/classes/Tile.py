@@ -110,3 +110,9 @@ class Tile:
                     return True
 
         return False
+
+    def rotate(self):
+        pass
+
+    def mayRotate(self):
+        pass
