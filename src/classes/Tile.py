@@ -72,7 +72,7 @@ class Tile:
         for str in range(len(field)):
             ys = field[str]
             for t in self.body:
-                if t.y == str and ys[t.x] - 1 == 1:
+                if t.y == str and ys[t.x - 1] == 1:
                     return False
 
         return True
@@ -85,22 +85,18 @@ class Tile:
         for str in range(len(field)):
             ys = field[str]
             for t in self.body:
-                if t.y == str and ys[t.x] + 1 == 1:
+                if t.y == str and ys[t.x + 1] == 1:
                     return False
 
         return True
 
     def move(self, event, field):
-        obR = not self.mayMoveR(field)
-        obL = not self.mayMoveL(field)
 
-        print("r:", obR, "l:", obL)
-
-        if event.keysym == "Right" and not obR:
+        if event.keysym == "Right" and self.mayMoveR(field):
             for i in range(len(self.body)):
                 self.body[i].x += 1
                 self.canvas.move(self.tile_ids[i], self.cellLen, 0)
-        elif event.keysym == "Left" and not obL:
+        elif event.keysym == "Left" and self.mayMoveL(field):
             for i in range(len(self.body)):
                 self.body[i].x -= 1
                 self.canvas.move(self.tile_ids[i], -self.cellLen, 0)
