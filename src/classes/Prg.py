@@ -16,14 +16,7 @@ class Prg(Tile):
             ]
         ]
 
-        for body in self.bodies:
-            for i in body:
-                print("x:", i.x, "y:", i.y)
-            print("")
-        print("")
-        print("")
-        for coord in self.body:
-            print(coord.x, coord.y)
+
 
 
 

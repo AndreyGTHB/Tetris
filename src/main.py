@@ -40,7 +40,7 @@ def eventListener(event):
 
     if event.keysym == "Right" or event.keysym == "Left":
         tile.move(event, field)
-    elif event.keysym == "Space":
+    elif event.keysym == "Up":
         tile.rotate()
 
 
@@ -56,7 +56,7 @@ def drawField():
 window.bind_all("<Key>", eventListener)
 
 
-def tick():
+def tick(event):
     global tile
 
     if tile.collision(field):
@@ -68,9 +68,6 @@ def tick():
 
     tile.fall()
 
-    t = Timer(0.7, tick)
-    t.start()
 
-
-tick()
+c.bind_all("<Down>", tick)
 window.mainloop()

@@ -12,7 +12,7 @@ class Tile:
         self.tile_ids = list()
         self.cellLen = cell
 
-        self.next_turn = 1
+        self.current_turn = 0
         if shape == "sq":
             self.body = [
                 Point(0, -2),
@@ -66,7 +66,6 @@ class Tile:
 
     def fall(self):
         for i in range(len(self.body)):
-            self.body[i].y += 1
             self.canvas.move(self.tile_ids[i], 0, self.cellLen)
 
         for body in range(len(self.bodies)):
@@ -103,7 +102,6 @@ class Tile:
 
         if event.keysym == "Right" and self.mayMoveR(field):
             for i in range(len(self.body)):
-                self.body[i].x += 1
                 self.canvas.move(self.tile_ids[i], self.cellLen, 0)
 
             for body in range(len(self.bodies)):
@@ -112,30 +110,27 @@ class Tile:
 
         elif event.keysym == "Left" and self.mayMoveL(field):
             for i in range(len(self.body)):
-                self.body[i].x -= 1
                 self.canvas.move(self.tile_ids[i], -self.cellLen, 0)
+
             for body in range(len(self.bodies)):
                 for i in range(len(self.bodies[body])):
                     self.bodies[body][i].y -= 1
 
     def collision(self, field):
-        for i in range(len(field)):
-            for block in self.body:
-                if block.y + 1 == i and field[i][block.x] == 1:
-                    return True
-                elif block.y >= 11:
-                    return True
-
+        for block in self.body:
+            if block.y >= 11 or field[block.y + 1][block.x] == 1:
+                return True
         return False
 
     def rotate(self):
-        self.body = self.bodies[self.next_turn].copy()
+        self.current_turn += 1
+
+        if self.current_turn >= len(self.bodies):
+            self.current_turn = 0
+
+        self.body = self.bodies[self.current_turn]
         self.clear()
         self.draw("lightgreen")
-        if self.next_turn == 0:
-            self.next_turn = 1
-        else:
-            self.next_turn = 0
 
     def mayRotate(self):
         pass
