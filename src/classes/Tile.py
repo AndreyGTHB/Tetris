@@ -11,6 +11,8 @@ class Tile:
         self.canvas = canvas
         self.tile_ids = list()
         self.cellLen = cell
+
+        self.next_turn = 1
         if shape == "sq":
             self.body = [
                 Point(0, -2),
@@ -42,6 +44,8 @@ class Tile:
         else:
             raise ValueError("'" + shape + "'", "is not a shape")
 
+        self.bodies = [self.body.copy()]
+
         self.draw("lightgreen")
 
     def draw(self, color):
@@ -64,6 +68,10 @@ class Tile:
         for i in range(len(self.body)):
             self.body[i].y += 1
             self.canvas.move(self.tile_ids[i], 0, self.cellLen)
+
+        for body in range(len(self.bodies)):
+            for i in range(len(self.bodies[body])):
+                self.bodies[body][i].y += 1
 
     def mayMoveL(self, field):
         for coord in self.body:
@@ -97,10 +105,18 @@ class Tile:
             for i in range(len(self.body)):
                 self.body[i].x += 1
                 self.canvas.move(self.tile_ids[i], self.cellLen, 0)
+
+            for body in range(len(self.bodies)):
+                for i in range(len(self.bodies[body])):
+                    self.bodies[body][i].x += 1
+
         elif event.keysym == "Left" and self.mayMoveL(field):
             for i in range(len(self.body)):
                 self.body[i].x -= 1
                 self.canvas.move(self.tile_ids[i], -self.cellLen, 0)
+            for body in range(len(self.bodies)):
+                for i in range(len(self.bodies[body])):
+                    self.bodies[body][i].y -= 1
 
     def collision(self, field):
         for i in range(len(field)):
@@ -113,7 +129,13 @@ class Tile:
         return False
 
     def rotate(self):
-        pass
+        self.body = self.bodies[self.next_turn].copy()
+        self.clear()
+        self.draw("lightgreen")
+        if self.next_turn == 0:
+            self.next_turn = 1
+        else:
+            self.next_turn = 0
 
     def mayRotate(self):
         pass
