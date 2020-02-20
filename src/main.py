@@ -56,7 +56,7 @@ def drawField():
 window.bind_all("<Key>", eventListener)
 
 
-def tick(event):
+def tick():
     global tile
 
     if tile.collision(field):
@@ -68,6 +68,8 @@ def tick(event):
 
     tile.fall()
 
+    t = Timer(0.9, tick)
+    t.start()
 
-c.bind_all("<Down>", tick)
+tick()
 window.mainloop()

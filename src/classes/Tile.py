@@ -44,7 +44,7 @@ class Tile:
         else:
             raise ValueError("'" + shape + "'", "is not a shape")
 
-        self.bodies = [self.body.copy()]
+        self.bodies = [self.body]
 
         self.draw("lightgreen")
 
