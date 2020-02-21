@@ -65,9 +65,6 @@ class Tile:
             del (self.tile_ids[0])
 
     def fall(self):
-        for i in range(len(self.body)):
-            self.canvas.move(self.tile_ids[i], 0, self.cellLen)
-
         for body in range(len(self.bodies)):
             for i in range(len(self.bodies[body])):
                 self.bodies[body][i].y += 1
@@ -101,20 +98,14 @@ class Tile:
     def move(self, event, field):
 
         if event.keysym == "Right" and self.mayMoveR(field):
-            for i in range(len(self.body)):
-                self.canvas.move(self.tile_ids[i], self.cellLen, 0)
-
             for body in range(len(self.bodies)):
                 for i in range(len(self.bodies[body])):
                     self.bodies[body][i].x += 1
 
         elif event.keysym == "Left" and self.mayMoveL(field):
-            for i in range(len(self.body)):
-                self.canvas.move(self.tile_ids[i], -self.cellLen, 0)
-
             for body in range(len(self.bodies)):
                 for i in range(len(self.bodies[body])):
-                    self.bodies[body][i].y -= 1
+                    self.bodies[body][i].x -= 1
 
     def collision(self, field):
         for block in self.body:
