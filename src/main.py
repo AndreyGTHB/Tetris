@@ -1,6 +1,7 @@
 from tkinter import *
 from random import choice
 from threading import Timer
+from random import randint
 
 from classes.Shapes import *
 
@@ -36,9 +37,30 @@ field_ids = []
 shapes = ['sq', 'ltr', 'ln', 'prg']
 tile = Prg(c, tile_size)
 
+def newTile():
+    global Tile
 
+    tile = None
+
+    newT = randint(1, 4)
+    if newT == 1:
+        tile = Sq(c, tile_size)
+    elif newT == 2:
+        tile = Prg(c, tile_size)
+    elif newT == 3:
+        tile = Ln(c, tile_size)
+    elif newT == 4:
+        tile = Ltr(c, tile_size)
+
+
+run_listener = False
 def eventListener(event):
     global tile
+    global run_listener
+
+    if run_listener:
+        return
+    run_listener = True
 
     if event.keysym == "Right" or event.keysym == "Left":
         tile.move(event, field)
@@ -46,6 +68,8 @@ def eventListener(event):
         tile.rotate()
 
     redraw()
+
+    run_listener = False
 
 
 def redrawField():
@@ -70,7 +94,6 @@ def redraw(field=False):
 
 window.bind_all("<Key>", eventListener)
 
-
 def tick():
     global tile
 
@@ -78,14 +101,17 @@ def tick():
         for coord in tile.body:
             field[coord.y][coord.x] = 1
         tile.clear()
-        tile = Prg(c, tile_size)
+        newTile()
         redraw(field=True)
 
     tile.fall()
     redraw()
 
-    t = Timer(0.4, tick)
+    t = Timer(0.5, tick)
     t.start()
 
+newTile()
+
 tick()
+
 window.mainloop()
