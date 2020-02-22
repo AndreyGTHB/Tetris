@@ -1,2 +1,4 @@
 # Tetris
-___***Geekycats project***___
+_ ***Geekycats project*** _
+
+***Control:***_ <-, -> keys for movement and up arrow to rotate_
