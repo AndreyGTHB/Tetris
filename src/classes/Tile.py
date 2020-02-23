@@ -120,8 +120,6 @@ class Tile:
             self.current_turn = 0
 
         self.body = self.bodies[self.current_turn]
-        self.clear()
-        self.draw("lightgreen")
 
     def mayRotate(self):
         pass

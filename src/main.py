@@ -108,7 +108,5 @@ def tick():
     t.start()
 
 tile = generateTile()
-
 tick()
-
 window.mainloop()
