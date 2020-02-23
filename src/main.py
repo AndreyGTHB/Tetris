@@ -37,20 +37,17 @@ field_ids = []
 shapes = ['sq', 'ltr', 'ln', 'prg']
 tile = Prg(c, tile_size)
 
-def newTile():
-    global Tile
-
-    tile = None
+def generateTile():
 
     newT = randint(1, 4)
     if newT == 1:
-        tile = Sq(c, tile_size)
+        return Sq(c, tile_size)
     elif newT == 2:
-        tile = Prg(c, tile_size)
+        return Prg(c, tile_size)
     elif newT == 3:
-        tile = Ln(c, tile_size)
+        return Ln(c, tile_size)
     elif newT == 4:
-        tile = Ltr(c, tile_size)
+        return Ltr(c, tile_size)
 
 
 run_listener = False
@@ -101,7 +98,7 @@ def tick():
         for coord in tile.body:
             field[coord.y][coord.x] = 1
         tile.clear()
-        newTile()
+        tile = generateTile()
         redraw(field=True)
 
     tile.fall()
@@ -110,7 +107,7 @@ def tick():
     t = Timer(0.5, tick)
     t.start()
 
-newTile()
+tile = generateTile()
 
 tick()
 
