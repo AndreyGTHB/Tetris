@@ -51,6 +51,7 @@ def generateTile():
 
 
 run_listener = False
+
 def eventListener(event):
     global tile
     global run_listener
@@ -62,7 +63,7 @@ def eventListener(event):
     if event.keysym == "Right" or event.keysym == "Left":
         tile.move(event, field)
     elif event.keysym == "Up":
-        tile.rotate()
+        tile.rotate(field)
 
     redraw()
 

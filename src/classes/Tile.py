@@ -113,13 +113,23 @@ class Tile:
                 return True
         return False
 
-    def rotate(self):
+    def rotate(self, field):
         self.current_turn += 1
 
         if self.current_turn >= len(self.bodies):
             self.current_turn = 0
 
-        self.body = self.bodies[self.current_turn]
+        if self.mayRotate(field):
+            self.body = self.bodies[self.current_turn]
 
-    def mayRotate(self):
-        pass
+    def mayRotate(self, field):
+        try:
+            nextBody = self.bodies[self.current_turn + 1]
+        except IndexError:
+            nextBody = self.bodies[0]
+
+        for block in nextBody:
+            if (block.x > 9 or block.x < 0) or field[block.y][block.x] == 1:
+                return False
+
+        return True
