@@ -31,10 +31,10 @@ field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
-
+blocks = []
 field_ids = []
-colours = ["lightblue", "lightgreen", "orange"]
-stroke_colours = ["lightblue", "lightblue", "black"]
+colours = ["lightblue", "orange", "lightgreen"]
+stroke_colours = ["lightblue", "black", "black"]
 
 for str in range(12):
     field_ids.append([])
@@ -74,6 +74,7 @@ def eventListener(event):
     elif event.keysym == "Up":
         tile.rotate(field)
 
+    updateField()
     redraw()
 
     run_listener = False
@@ -88,16 +89,32 @@ def redraw():
             c.itemconfig(field_ids[i_y][i_x], fill=colour, outline=stroke_colour)
 
 
+def updateField():
+    global field
+
+    for i_y in range(len(field)):
+        for i_x in range(len(field[i_y])):
+            field[i_y][i_x] = 0
+
+    for block in tile.body:
+        field[block.y][block.x] = 2
+
+    for block in blocks:
+        field[block.y][block.x] = 1
+
+
 def tick():
     global tile
 
     if tile.collision(field):
         for coord in tile.body:
-            field[coord.y][coord.x] = 1
+            blocks.append(coord)
         tile.clear()
         tile = generateTile()
+        updateField()
 
     tile.fall()
+    updateField()
     redraw()
 
     t = Timer(0.5, tick)
