@@ -129,7 +129,7 @@ class Tile:
             nextBody = self.bodies[0]
 
         for block in nextBody:
-            if (block.x > 9 or block.x < 0) or field[block.y][block.x] == 1:
+            if (block.x > 9 or block.x < 0 or block.y > 11 or block.y < 0) or field[block.y][block.x] == 1:
                 return False
 
         return True

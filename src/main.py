@@ -33,12 +33,20 @@ field = [
 ]
 
 field_ids = []
+colours = ["lightblue", "lightgreen", "orange"]
+stroke_colours = ["lightblue", "lightblue", "black"]
 
-shapes = ['sq', 'ltr', 'ln', 'prg']
-tile = Prg(c, tile_size)
+for str in range(12):
+    field_ids.append([])
+    y = tile_size * str
+    for clmn in range(10):
+        x = tile_size * clmn
+        padding = 3
+        field_ids[str].append(
+            c.create_rectangle(x, y, x + tile_size - padding, y + tile_size - padding, fill="lightblue"))
+
 
 def generateTile():
-
     newT = randint(1, 4)
     if newT == 1:
         return Sq(c, tile_size)
@@ -51,6 +59,7 @@ def generateTile():
 
 
 run_listener = False
+
 
 def eventListener(event):
     global tile
@@ -70,27 +79,14 @@ def eventListener(event):
     run_listener = False
 
 
-def redrawField():
-    global field_ids
-
-    for id in field_ids:
-        c.delete(id)
-
+def redraw():
     for i_y in range(len(field)):
-        y = field[i_y]
-        for x in range(len(y)):
-            if field[i_y][x] == 1:
-                field_ids.append(c.create_rectangle(tile_size * x, tile_size * i_y, tile_size * (x + 1), tile_size * (i_y + 1), \
-                                   fill="orange"))
+        for i_x in range(len(field[i_y])):
+            num = field[i_y][i_x]
+            colour = colours[num]
+            stroke_colour = stroke_colours[num]
+            c.itemconfig(field_ids[i_y][i_x], fill=colour, outline=stroke_colour)
 
-def redraw(field=False):
-    if field:
-        redrawField()
-    tile.clear()
-    tile.draw("lightgreen")
-
-
-window.bind_all("<Key>", eventListener)
 
 def tick():
     global tile
@@ -100,7 +96,6 @@ def tick():
             field[coord.y][coord.x] = 1
         tile.clear()
         tile = generateTile()
-        redraw(field=True)
 
     tile.fall()
     redraw()
@@ -108,6 +103,8 @@ def tick():
     t = Timer(0.5, tick)
     t.start()
 
+
+window.bind_all("<Key>", eventListener)
 tile = generateTile()
 tick()
 window.mainloop()
