@@ -1,8 +1,7 @@
 from tkinter import *
 from time import sleep
-from abc import abstractmethod
 
-from classes.Point import *
+from src.classes.Point import *
 
 
 class Tile:
@@ -15,38 +14,36 @@ class Tile:
         self.current_turn = 0
         if shape == "sq":
             self.body = [
-                Point(0, -2),
-                Point(1, -2),
-                Point(0, -1),
-                Point(1, -1)
+                Point(0, 0),
+                Point(1, 0),
+                Point(0, 1),
+                Point(1, 1)
             ]
         elif shape == "prg":
             self.body = [
-                Point(0, -1),
-                Point(1, -1),
-                Point(1, -2),
-                Point(2, -2)
+                Point(0, 1),
+                Point(1, 1),
+                Point(1, 0),
+                Point(2, 0)
             ]
         elif shape == "ln":
             self.body = [
-                Point(0, -1),
-                Point(1, -1),
-                Point(2, -1),
-                Point(3, -1)
+                Point(0, 0),
+                Point(1, 0),
+                Point(2, 0),
+                Point(3, 0)
             ]
         elif shape == "ltr":
             self.body = [
-                Point(0, -1),
-                Point(1, -1),
-                Point(2, -1),
-                Point(2, -2)
+                Point(0, 1),
+                Point(1, 1),
+                Point(2, 1),
+                Point(2, 0)
             ]
         else:
             raise ValueError("'" + shape + "'", "is not a shape")
 
         self.bodies = [self.body]
-
-        self.draw("lightgreen")
 
     def draw(self, color):
         c = self.canvas
@@ -114,22 +111,22 @@ class Tile:
         return False
 
     def rotate(self, field):
-        self.current_turn += 1
-
-        if self.current_turn >= len(self.bodies):
-            self.current_turn = 0
 
         if self.mayRotate(field):
+            self.current_turn += 1
+            if self.current_turn >= len(self.bodies):
+                self.current_turn = 0
             self.body = self.bodies[self.current_turn]
 
     def mayRotate(self, field):
-        try:
-            nextBody = self.bodies[self.current_turn + 1]
-        except IndexError:
-            nextBody = self.bodies[0]
+        if self.current_turn + 1 >= len(self.bodies):
+            next_turn = 0
+        else:
+            next_turn = self.current_turn + 1
+        nextBody = self.bodies[next_turn]
 
         for block in nextBody:
-            if (block.x > 9 or block.x < 0 or block.y > 11 or block.y < 0) or field[block.y][block.x] == 1:
-                return False
+            if block.x > 9 or block.x < 0 or block.y > 11 or block.y < 0 or (field[block.x][block.y] == 1):
+               return False
 
         return True

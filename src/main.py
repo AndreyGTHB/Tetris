@@ -3,7 +3,7 @@ from random import choice
 from threading import Timer
 from random import randint
 
-from classes.Shapes import *
+from src.classes.Shapes import *
 
 window = Tk()
 window.title("Tetris")
@@ -33,8 +33,8 @@ field = [
 ]
 blocks = []
 field_ids = []
-colours = ["lightblue", "orange", "lightgreen"]
-stroke_colours = ["lightblue", "black", "black"]
+colours = ("lightblue", "orange", "lightgreen")
+stroke_colours = ("lightblue", "black", "black")
 
 for str in range(12):
     field_ids.append([])
@@ -73,6 +73,8 @@ def eventListener(event):
         tile.move(event, field)
     elif event.keysym == "Up":
         tile.rotate(field)
+    elif event.keysym.lower() in ["g", "idiaeresis"]:
+        tick()
 
     updateField()
     redraw()

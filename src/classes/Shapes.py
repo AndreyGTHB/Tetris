@@ -9,10 +9,10 @@ class Prg(Tile):
         self.bodies = [
             self.body,
             [
-                Point(1, -1),
-                Point(1, -2),
-                Point(0, -2),
-                Point(0, -3),
+                Point(1, 2),
+                Point(1, 1),
+                Point(0, 1),
+                Point(0, 0),
             ]
         ]
 
@@ -20,10 +20,6 @@ class Prg(Tile):
 class Sq(Tile):
     def __init__(self, c, cell):
         super().__init__(c, "sq", cell)
-
-        self.bodies = [
-            self.body
-        ]
 
 
 class Ln(Tile):
@@ -33,10 +29,10 @@ class Ln(Tile):
         self.bodies = [
             self.body,
             [
-                Point(1, 0),
                 Point(1, -1),
-                Point(1, -2),
-                Point(1, -3),
+                Point(1, 0),
+                Point(1, 1),
+                Point(1, 2),
             ]
         ]
 
@@ -48,21 +44,21 @@ class Ltr(Tile):
         self.bodies = [
             self.body,
             [
+                Point(2, 2),
+                Point(2, 1),
                 Point(2, 0),
-                Point(2, -1),
-                Point(2, -2),
-                Point(1, -2),
-            ],
-            [
-                Point(2, -1),
-                Point(1, -1),
-                Point(0, -1),
-                Point(0, 0),
-            ],
-            [
-                Point(1, -2),
-                Point(1, -1),
                 Point(1, 0),
-                Point(2, 0),
+            ],
+            [
+                Point(2, 1),
+                Point(1, 1),
+                Point(0, 1),
+                Point(0, 2),
+            ],
+            [
+                Point(1, 0),
+                Point(1, 1),
+                Point(1, 2),
+                Point(2, 2),
             ]
         ]
