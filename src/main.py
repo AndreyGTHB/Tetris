@@ -4,58 +4,49 @@ from threading import Timer
 from random import randint
 
 from src.classes.Shapes import *
+from src.settings import *
 
 window = Tk()
 window.title("Tetris")
 
-WIDTH = 500
-HEIGHT = 600
-c = Canvas(window, width=WIDTH, height=HEIGHT)
+c = Canvas(window, width=C_WIDTH, height=C_HEIGHT)
 c.pack()
 
-background = c.create_rectangle(0, 0, WIDTH, HEIGHT, fill="lightblue")
+background = c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")
 
-tile_size = 50
-
-field = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
-blocks = []
+score = 0
+game_over = False
+field = []
 field_ids = []
-colours = ("lightblue", "orange", "lightgreen")
-stroke_colours = ("lightblue", "black", "black")
 
-for str in range(12):
+for str in range(HEIGHT_IN_BLOCKS):
     field_ids.append([])
-    y = tile_size * str
-    for clmn in range(10):
-        x = tile_size * clmn
+    field.append([])
+    y = TILE_SIZE * str
+    for clmn in range(WIDTH_IN_BLOCKS):
+        x = TILE_SIZE * clmn
         padding = 3
         field_ids[str].append(
-            c.create_rectangle(x, y, x + tile_size - padding, y + tile_size - padding, fill="lightblue"))
+            c.create_rectangle(x, y, x + TILE_SIZE - padding, y + TILE_SIZE - padding, fill="lightblue"))
+        field[str].append(0)
+
+c.create_text(30, 10, text="SCORE:", fill="white")
+
+score_text = c.create_text(61, 10, fill="white")
+def show_score():
+    c.itemconfig(score_text, text=score)
 
 
 def generateTile():
     newT = randint(1, 4)
     if newT == 1:
-        return Sq(c, tile_size)
+        return Sq(c, TILE_SIZE)
     elif newT == 2:
-        return Prg(c, tile_size)
+        return Prg(c, TILE_SIZE)
     elif newT == 3:
-        return Ln(c, tile_size)
+        return Ln(c, TILE_SIZE)
     elif newT == 4:
-        return Ltr(c, tile_size)
+        return Ltr(c, TILE_SIZE)
 
 
 run_listener = False
@@ -64,6 +55,9 @@ run_listener = False
 def eventListener(event):
     global tile
     global run_listener
+
+    if game_over:
+        return
 
     if run_listener:
         return
@@ -86,9 +80,10 @@ def redraw():
     for i_y in range(len(field)):
         for i_x in range(len(field[i_y])):
             num = field[i_y][i_x]
-            colour = colours[num]
-            stroke_colour = stroke_colours[num]
+            colour = COLOURS[num]
+            stroke_colour = STROKE_COLOURS[num]
             c.itemconfig(field_ids[i_y][i_x], fill=colour, outline=stroke_colour)
+    show_score()
 
 
 def updateField():
@@ -96,24 +91,46 @@ def updateField():
 
     for i_y in range(len(field)):
         for i_x in range(len(field[i_y])):
-            field[i_y][i_x] = 0
+            if field[i_y][i_x] == 2:
+                field[i_y][i_x] = 0
 
     for block in tile.body:
         field[block.y][block.x] = 2
 
-    for block in blocks:
-        field[block.y][block.x] = 1
+
+def checkBuiltLine():
+    for i_y in range(len(field)):
+        blocks = 0
+        for num in field[i_y]:
+            if num == 1:
+                blocks += 1
+        if blocks == WIDTH_IN_BLOCKS:
+            return i_y
+    return -1
 
 
 def tick():
     global tile
+    global score
+    global game_over
 
     if tile.collision(field):
         for coord in tile.body:
-            blocks.append(coord)
-        tile.clear()
+            field[coord.y][coord.x] = 1
         tile = generateTile()
+        for block in tile.body:
+            if field[block.y][block.x] == 1:
+                game_over = True
+                c.create_text(C_WIDTH/2, C_HEIGHT/2, text="GAME OVER", fill="red", font=("Helvetica", 30))
+                return
         updateField()
+    builtLine = checkBuiltLine()
+    if builtLine != -1:
+        del field[builtLine]
+        field.insert(0, [])
+        for n in range(WIDTH_IN_BLOCKS):
+            field[0].append(0)
+        score += WIDTH_IN_BLOCKS
 
     tile.fall()
     updateField()

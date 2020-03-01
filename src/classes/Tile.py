@@ -1,7 +1,5 @@
-from tkinter import *
-from time import sleep
-
 from src.classes.Point import *
+from src.settings import *
 
 
 class Tile:
@@ -45,22 +43,6 @@ class Tile:
 
         self.bodies = [self.body]
 
-    def draw(self, color):
-        c = self.canvas
-        for p in self.body:
-            x = p.x * self.cellLen
-            y = p.y * self.cellLen
-            padding = 3
-            self.tile_ids.append(
-                c.create_rectangle(x, y, x + self.cellLen - padding, y + self.cellLen - padding, fill=color))
-
-    def clear(self):
-        for tile_id in self.tile_ids:
-            self.canvas.delete(tile_id)
-
-        for i in range(len(self.tile_ids)):
-            del (self.tile_ids[0])
-
     def fall(self):
         for body in range(len(self.bodies)):
             for i in range(len(self.bodies[body])):
@@ -81,7 +63,7 @@ class Tile:
 
     def mayMoveR(self, field):
         for coord in self.body:
-            if coord.x == 9:
+            if coord.x == WIDTH_IN_BLOCKS-1:
                 return False
 
         for str in range(len(field)):
@@ -106,7 +88,9 @@ class Tile:
 
     def collision(self, field):
         for block in self.body:
-            if block.y >= 11 or field[block.y + 1][block.x] == 1:
+            if block.y >= HEIGHT_IN_BLOCKS-1:
+                return True
+            elif field[block.y + 1][block.x] == 1:
                 return True
         return False
 
@@ -126,7 +110,9 @@ class Tile:
         nextBody = self.bodies[next_turn]
 
         for block in nextBody:
-            if block.x > 9 or block.x < 0 or block.y > 11 or block.y < 0 or (field[block.x][block.y] == 1):
-               return False
+            if block.x > WIDTH_IN_BLOCKS-1 or block.x < 0 or block.y > HEIGHT_IN_BLOCKS-1 or block.y < 0:  # If block out of field
+                return False
+            elif field[block.y][block.x] == 1:  # If block in built
+                return False
 
         return True

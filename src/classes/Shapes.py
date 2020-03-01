@@ -1,5 +1,5 @@
-from classes.Tile import Tile
-from classes.Point import Point
+from src.classes.Tile import Tile
+from src.classes.Point import Point
 
 
 class Prg(Tile):
