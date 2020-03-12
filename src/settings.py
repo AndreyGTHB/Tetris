@@ -11,3 +11,6 @@ SIZE_IN_BLOCKS = (WIDTH_IN_BLOCKS, HEIGHT_IN_BLOCKS)
 
 COLOURS = ("lightblue", "orange", "lightgreen")
 STROKE_COLOURS = ("lightblue", "black", "black")
+
+
+RECORD_FILE = "records.json"

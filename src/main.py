@@ -2,9 +2,29 @@ from tkinter import *
 from random import choice
 from threading import Timer
 from random import randint
+import json
 
-from src.classes.Shapes import *
-from src.settings import *
+from classes.Shapes import *
+from settings import *
+
+
+# Загрузка рекордов
+record_dict = {1: 1, 2: 2}
+with open(RECORD_FILE, "r") as file_object:
+    record_dict = json.load(file_object)
+
+player_name = input("What is your name?")
+if player_name == "":
+    ananimouses = 0
+    for key in record_dict:
+        if "Ananimouse" in key:
+            ananimouses += 1
+    player_name = "Ananimouse" + str(ananimouses + 1)
+
+def fitness(item):
+    return item[1]
+
+
 
 window = Tk()
 window.title("Tetris")
@@ -53,7 +73,6 @@ run_listener = False
 
 
 def eventListener(event):
-    global tile
     global run_listener
 
     if game_over:
@@ -67,8 +86,8 @@ def eventListener(event):
         tile.move(event, field)
     elif event.keysym == "Up":
         tile.rotate(field)
-    elif event.keysym.lower() in ["g", "idiaeresis"]:
-        tick()
+    elif event.keysym == "Down":
+        tick(True)
 
     updateField()
     redraw()
@@ -109,10 +128,11 @@ def checkBuiltLine():
     return -1
 
 
-def tick():
+def tick(artificial = False):
     global tile
     global score
     global game_over
+    global record_dict
 
     if tile.collision(field):
         for coord in tile.body:
@@ -122,6 +142,20 @@ def tick():
             if field[block.y][block.x] == 1:
                 game_over = True
                 c.create_text(C_WIDTH/2, C_HEIGHT/2, text="GAME OVER", fill="red", font=("Helvetica", 30))
+
+                c.create_text(C_WIDTH/2, C_HEIGHT/2 + 40, text="BEST SCORES", fill="red", font=("Helvetica", 15))
+
+                record_dict[player_name] = score
+                record_dict = sorted(record_dict, key=fitness, reverse=True)[0:4]
+
+                i = 0
+                for name in record_dict:
+                    c.create_text(C_WIDTH, C_HEIGHT/2 + 60 + 14*i, text=f"{name}: {record_dict[name]}", fill="red", font=("Helvetica", 10))
+                    
+
+                with open(RECORD_FILE, "w") as file_object:
+                    json.dump(record_dict, file_object)
+                
                 return
         updateField()
     builtLine = checkBuiltLine()
@@ -135,9 +169,10 @@ def tick():
     tile.fall()
     updateField()
     redraw()
-
-    t = Timer(0.5, tick)
-    t.start()
+    
+    if not artificial:
+        t = Timer(0.5, tick)
+        t.start()
 
 
 window.bind_all("<Key>", eventListener)
