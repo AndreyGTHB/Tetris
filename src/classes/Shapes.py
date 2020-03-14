@@ -64,7 +64,6 @@ class Ltr(Tile):
         ]
 
 
-
 class Tbl(Tile):
     def __init__(self, c, cell):
         super().__init__(c, "tbl", cell)
@@ -90,7 +89,3 @@ class Tbl(Tile):
                 Point(2, 1)
             ]
         ]
-
-
-
-        

@@ -7,7 +7,6 @@ import json
 from classes.Shapes import *
 from settings import *
 
-
 # Загрузка рекордов
 record_dict = {1: 1, 2: 2}
 with open(RECORD_FILE, "r") as file_object:
@@ -16,15 +15,15 @@ records = list(record_dict.items())
 
 player_name = input("What is your name?")
 if player_name == "":
-    ananimouses = 0
+    anonymouses = 0
     for key in record_dict:
-        if "Ananimouse" in key:
-            ananimouses += 1
-    player_name = "Ananimouse" + str(ananimouses + 1)
+        if "Anonymous" in key:
+            anonymouses += 1
+    player_name = "Anonymous" + str(anonymouses + 1)
+
 
 def fitness(item):
     return item[1]
-
 
 
 window = Tk()
@@ -54,6 +53,8 @@ for str in range(HEIGHT_IN_BLOCKS):
 c.create_text(30, 10, text="SCORE:", fill="white")
 
 score_text = c.create_text(61, 10, fill="white")
+
+
 def show_score():
     c.itemconfig(score_text, text=score)
 
@@ -121,12 +122,14 @@ def updateField():
 
 
 def update_record_dict(rec_list):
-    record_dict = {}
+    rec_dict = {}
+    names = []
 
     for record in rec_list:
-        record_dict[record[0]] = record[1]
+        rec_dict[record[0]] = record[1]
+        names.append(record[0])
 
-    return record_dict
+    return rec_dict
 
 
 def checkBuiltLine():
@@ -140,7 +143,7 @@ def checkBuiltLine():
     return -1
 
 
-def tick(artificial = False):
+def tick(artificial=False):
     global tile
     global score
     global game_over
@@ -154,25 +157,31 @@ def tick(artificial = False):
         for block in tile.body:
             if field[block.y][block.x] == 1:
                 game_over = True
-                c.create_text(C_WIDTH/2, C_HEIGHT/2, text="GAME OVER", fill="red", font=("Helvetica", 30))
+                c.create_text(C_WIDTH / 2, C_HEIGHT / 2, text="GAME OVER", fill="red", font=("Helvetica", 30))
 
-                c.create_text(C_WIDTH/2, C_HEIGHT/2 + 40, text="BEST SCORES:", fill="green", font=("Helvetica", 15))
+                c.create_text(C_WIDTH / 2, C_HEIGHT / 2 + 40, text="BEST SCORES:", fill="green", font=("Helvetica", 15))
 
                 records.append((player_name, score))
                 records = sorted(records, key=fitness, reverse=True)[0:3]
 
                 i = 0
+                names = []
                 for record in records:
-                    c.create_text(C_WIDTH/2, C_HEIGHT/2 + 60 + 20*i, text=f"{record[0]}: {record[1]}", fill="green", font=("Helvetica", 14))
+                    if not record[0] in names:
+                        c.create_text(C_WIDTH / 2, C_HEIGHT / 2 + 60 + 20 * i, text=f"{record[0]}: {record[1]}",
+                                      fill="green", font=("Helvetica", 14))
+                        names.append(record[0])
+                    else:
+                        i -= 1
                     i += 1
                 del i
+                del names
 
                 record_dict = update_record_dict(records)
-                    
 
                 with open(RECORD_FILE, "w") as file_object:
                     json.dump(record_dict, file_object)
-                
+
                 return
         updateField()
     builtLine = checkBuiltLine()
@@ -186,7 +195,7 @@ def tick(artificial = False):
     tile.fall()
     updateField()
     redraw()
-    
+
     if not artificial:
         t = Timer(0.5, tick)
         t.start()
