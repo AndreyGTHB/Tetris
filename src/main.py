@@ -59,7 +59,7 @@ def show_score():
 
 
 def generateTile():
-    newT = randint(1, 4)
+    newT = randint(1, 5)
     if newT == 1:
         return Sq(c, TILE_SIZE)
     elif newT == 2:
@@ -68,6 +68,8 @@ def generateTile():
         return Ln(c, TILE_SIZE)
     elif newT == 4:
         return Ltr(c, TILE_SIZE)
+    elif newT == 5:
+        return Tbl(c, TILE_SIZE)
 
 
 run_listener = False
@@ -163,6 +165,7 @@ def tick(artificial = False):
                 for record in records:
                     c.create_text(C_WIDTH/2, C_HEIGHT/2 + 60 + 20*i, text=f"{record[0]}: {record[1]}", fill="green", font=("Helvetica", 14))
                     i += 1
+                del i
 
                 record_dict = update_record_dict(records)
                     

@@ -38,6 +38,13 @@ class Tile:
                 Point(2, 1),
                 Point(2, 0)
             ]
+        elif shape == "tbl":
+            self.body = [
+                Point(0, 1),
+                Point(1, 1),
+                Point(2, 1),
+                Point(1, 0)
+            ]
         else:
             raise ValueError("'" + shape + "'", "is not a shape")
 

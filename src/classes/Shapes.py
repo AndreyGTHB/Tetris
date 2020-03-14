@@ -62,3 +62,35 @@ class Ltr(Tile):
                 Point(2, 2),
             ]
         ]
+
+
+
+class Tbl(Tile):
+    def __init__(self, c, cell):
+        super().__init__(c, "tbl", cell)
+
+        self.bodies = [
+            self.body,
+            [
+                Point(1, 0),
+                Point(1, 1),
+                Point(1, 2),
+                Point(0, 1)
+            ],
+            [
+                Point(0, 1),
+                Point(1, 1),
+                Point(2, 1),
+                Point(1, 2)
+            ],
+            [
+                Point(1, 0),
+                Point(1, 1),
+                Point(1, 2),
+                Point(2, 1)
+            ]
+        ]
+
+
+
+        
