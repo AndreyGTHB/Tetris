@@ -12,6 +12,7 @@ from settings import *
 record_dict = {1: 1, 2: 2}
 with open(RECORD_FILE, "r") as file_object:
     record_dict = json.load(file_object)
+records = list(record_dict.items())
 
 player_name = input("What is your name?")
 if player_name == "":
@@ -117,6 +118,15 @@ def updateField():
         field[block.y][block.x] = 2
 
 
+def update_record_dict(rec_list):
+    record_dict = {}
+
+    for record in rec_list:
+        record_dict[record[0]] = record[1]
+
+    return record_dict
+
+
 def checkBuiltLine():
     for i_y in range(len(field)):
         blocks = 0
@@ -132,6 +142,7 @@ def tick(artificial = False):
     global tile
     global score
     global game_over
+    global records
     global record_dict
 
     if tile.collision(field):
@@ -143,14 +154,17 @@ def tick(artificial = False):
                 game_over = True
                 c.create_text(C_WIDTH/2, C_HEIGHT/2, text="GAME OVER", fill="red", font=("Helvetica", 30))
 
-                c.create_text(C_WIDTH/2, C_HEIGHT/2 + 40, text="BEST SCORES", fill="red", font=("Helvetica", 15))
+                c.create_text(C_WIDTH/2, C_HEIGHT/2 + 40, text="BEST SCORES:", fill="green", font=("Helvetica", 15))
 
-                record_dict[player_name] = score
-                record_dict = sorted(record_dict, key=fitness, reverse=True)[0:4]
+                records.append((player_name, score))
+                records = sorted(records, key=fitness, reverse=True)[0:3]
 
                 i = 0
-                for name in record_dict:
-                    c.create_text(C_WIDTH, C_HEIGHT/2 + 60 + 14*i, text=f"{name}: {record_dict[name]}", fill="red", font=("Helvetica", 10))
+                for record in records:
+                    c.create_text(C_WIDTH/2, C_HEIGHT/2 + 60 + 20*i, text=f"{record[0]}: {record[1]}", fill="green", font=("Helvetica", 14))
+                    i += 1
+
+                record_dict = update_record_dict(records)
                     
 
                 with open(RECORD_FILE, "w") as file_object:

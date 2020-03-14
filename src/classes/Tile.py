@@ -1,5 +1,5 @@
-from src.classes.Point import *
-from src.settings import *
+from classes.Point import *
+from settings import *
 
 
 class Tile:
