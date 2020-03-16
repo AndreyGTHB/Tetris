@@ -7,6 +7,7 @@ import json
 from classes.Shapes import *
 from settings import *
 
+
 # Загрузка рекордов
 record_dict = {1: 1, 2: 2}
 with open(RECORD_FILE, "r") as file_object:
@@ -20,6 +21,7 @@ if player_name == "":
         if "Anonymous" in key:
             anonymouses += 1
     player_name = "Anonymous" + str(anonymouses + 1)
+
 
 
 def fitness(item):
