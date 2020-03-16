@@ -7,9 +7,8 @@ import json
 from classes.Shapes import *
 from settings import *
 
-
 # Загрузка рекордов
-record_dict = {1: 1, 2: 2}
+record_dict = {1: 1}
 with open(RECORD_FILE, "r") as file_object:
     record_dict = json.load(file_object)
 records = list(record_dict.items())
@@ -21,7 +20,6 @@ if player_name == "":
         if "Anonymous" in key:
             anonymouses += 1
     player_name = "Anonymous" + str(anonymouses + 1)
-
 
 
 def fitness(item):
@@ -37,10 +35,15 @@ c.pack()
 background = c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")
 
 score = 0
+
 game_over = False
+
+paused = False
+pause_bg = None
+pause_text = None
+
 field = []
 field_ids = []
-
 for str in range(HEIGHT_IN_BLOCKS):
     field_ids.append([])
     field.append([])
@@ -55,6 +58,22 @@ for str in range(HEIGHT_IN_BLOCKS):
 c.create_text(30, 10, text="SCORE:", fill="white")
 
 score_text = c.create_text(61, 10, fill="white")
+
+
+def pause():
+    global paused
+    global pause_bg
+    global pause_text
+
+    if paused:
+        c.itemconfig(pause_bg, state=HIDDEN)
+        c.itemconfig(pause_text, state=HIDDEN)
+        paused = False
+    else:
+        pause_bg = c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")
+        pause_text = c.create_text(C_WIDTH/2, C_HEIGHT/2, text="PAUSED", font=("Helvetica", 30), fill="green")
+        paused = True
+    tick()
 
 
 def show_score():
@@ -75,30 +94,35 @@ def generateTile():
         return Tbl(c, TILE_SIZE)
 
 
-run_listener = False
-
-
 def eventListener(event):
-    global run_listener
+    global paused
+
+    print(paused)
 
     if game_over:
         return
-
-    if run_listener:
-        return
     run_listener = True
 
-    if event.keysym == "Right" or event.keysym == "Left":
+    key = event.keysym
+
+    if key == "q":
+        pause()
+    elif paused:
+        return
+    print(f"PAUSE() {paused}")
+
+    if key == "Right" or key == "Left":
         tile.move(event, field)
-    elif event.keysym == "Up":
+    elif key == "Up":
         tile.rotate(field)
-    elif event.keysym == "Down":
+    elif key == "Down":
         tick(True)
+    elif key == "space":
+        while not tile.collision(field):
+            tick(True)
 
     updateField()
     redraw()
-
-    run_listener = False
 
 
 def redraw():
@@ -151,6 +175,9 @@ def tick(artificial=False):
     global game_over
     global records
     global record_dict
+
+    if paused:
+        return
 
     if tile.collision(field):
         for coord in tile.body:
