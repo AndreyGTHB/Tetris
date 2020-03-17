@@ -97,8 +97,6 @@ def generateTile():
 def eventListener(event):
     global paused
 
-    print(paused)
-
     if game_over:
         return
     run_listener = True
@@ -109,7 +107,6 @@ def eventListener(event):
         pause()
     elif paused:
         return
-    print(f"PAUSE() {paused}")
 
     if key == "Right" or key == "Left":
         tile.move(event, field)
@@ -233,4 +230,5 @@ def tick(artificial=False):
 window.bind_all("<Key>", eventListener)
 tile = generateTile()
 tick()
+
 window.mainloop()
