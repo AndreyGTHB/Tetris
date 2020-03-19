@@ -9,8 +9,8 @@ C_SIZE = (C_WIDTH, C_HEIGHT)
 SIZE_IN_BLOCKS = (WIDTH_IN_BLOCKS, HEIGHT_IN_BLOCKS)
 
 
-COLOURS = ("lightblue", "orange", "lightgreen")
-STROKE_COLOURS = ("lightblue", "black", "black")
+COLOURS = ("lightblue", "orange", "lightgreen", "red")
+STROKE_COLOURS = ("lightblue", "black", "black", "black")
 
 
 RECORD_FILE = "records.json"

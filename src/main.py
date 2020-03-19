@@ -1,11 +1,11 @@
 from tkinter import *
-from random import choice
 from threading import Timer
 from random import randint
 import json
 
 from classes.Shapes import *
 from settings import *
+from classes.Bomb import Bomb
 
 # Загрузка рекордов
 record_dict = {1: 1}
@@ -51,9 +51,11 @@ for str in range(HEIGHT_IN_BLOCKS):
     for clmn in range(WIDTH_IN_BLOCKS):
         x = TILE_SIZE * clmn
         padding = 3
+        colour = COLOURS[0]
         field_ids[str].append(
-            c.create_rectangle(x, y, x + TILE_SIZE - padding, y + TILE_SIZE - padding, fill="lightblue"))
+            c.create_rectangle(x, y, x + TILE_SIZE - padding, y + TILE_SIZE - padding, fill=colour, outline=STROKE_COLOURS[0]))
         field[str].append(0)
+bombs = list()
 
 c.create_text(30, 10, text="SCORE:", fill="white")
 
@@ -71,7 +73,7 @@ def pause():
         paused = False
     else:
         pause_bg = c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")
-        pause_text = c.create_text(C_WIDTH/2, C_HEIGHT/2, text="PAUSED", font=("Helvetica", 30), fill="green")
+        pause_text = c.create_text(C_WIDTH / 2, C_HEIGHT / 2, text="PAUSED", font=("Helvetica", 30), fill="green")
         paused = True
     tick()
 
@@ -94,8 +96,39 @@ def generateTile():
         return Tbl(c, TILE_SIZE)
 
 
+def generate_bomb():
+    bomb_x = randint(0, WIDTH_IN_BLOCKS - 1)
+    bomb_y = randint(0, HEIGHT_IN_BLOCKS - 1)
+
+    block = field[bomb_y][bomb_x]
+    while block == 1 or block == 2 or block == 3:
+        bomb_x = randint(0, WIDTH_IN_BLOCKS - 1)
+        bomb_y = randint(0, HEIGHT_IN_BLOCKS - 1)
+
+    bomb_r = randint(3, 7)
+    return Bomb(bomb_x, bomb_y, bomb_r)
+
+
+def check_bomb_collision():
+    new_bombs = bombs
+    new_field = field
+    new_score = score
+
+    i_bomb = 0
+    for bomb in bombs:
+        if bomb.collision(field):
+            new_field, new_score = bomb.explosion(field, score)
+            del new_bombs[i_bomb]
+            i_bomb -= 1
+        i_bomb += 1
+    return new_field, new_bombs, new_score
+
+
 def eventListener(event):
     global paused
+    global bombs
+    global field
+    global score
 
     if game_over:
         return
@@ -119,6 +152,7 @@ def eventListener(event):
             tick(True)
 
     updateField()
+    field, bombs, score = check_bomb_collision()
     redraw()
 
 
@@ -137,8 +171,11 @@ def updateField():
 
     for i_y in range(len(field)):
         for i_x in range(len(field[i_y])):
-            if field[i_y][i_x] == 2:
+            if field[i_y][i_x] == 2 or field[i_y][i_x] == 3:
                 field[i_y][i_x] = 0
+
+    for bomb in bombs:
+        field[bomb.body.y][bomb.body.x] = 3
 
     for block in tile.body:
         field[block.y][block.x] = 2
@@ -172,9 +209,14 @@ def tick(artificial=False):
     global game_over
     global records
     global record_dict
+    global field
+    global bombs
 
     if paused:
         return
+
+    if randint(0, 20) == 0 and len(bombs) <= 1:
+        bombs.append(generate_bomb())
 
     if tile.collision(field):
         for coord in tile.body:
@@ -220,6 +262,9 @@ def tick(artificial=False):
 
     tile.fall()
     updateField()
+
+    field, bombs, score = check_bomb_collision()
+
     redraw()
 
     if not artificial:
@@ -229,6 +274,5 @@ def tick(artificial=False):
 
 window.bind_all("<Key>", eventListener)
 tile = generateTile()
-tick()
 
 window.mainloop()

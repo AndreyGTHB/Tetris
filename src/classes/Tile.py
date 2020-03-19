@@ -5,7 +5,6 @@ from settings import *
 class Tile:
 
     def __init__(self, canvas, shape, cell):
-        self.canvas = canvas
         self.tile_ids = list()
         self.cellLen = cell
 
