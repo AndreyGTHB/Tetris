@@ -1,6 +1,7 @@
 from tkinter import *
 from threading import Timer
 from random import randint
+import time
 import json
 
 from classes.Shapes import *
@@ -97,13 +98,13 @@ def generateTile():
 
 
 def generate_bomb():
-    bomb_x = randint(0, WIDTH_IN_BLOCKS - 1)
-    bomb_y = randint(0, HEIGHT_IN_BLOCKS - 1)
+    bomb_x = randint(2, WIDTH_IN_BLOCKS - 1)
+    bomb_y = randint(2, HEIGHT_IN_BLOCKS - 1)
 
     block = field[bomb_y][bomb_x]
     while block == 1 or block == 2 or block == 3:
-        bomb_x = randint(0, WIDTH_IN_BLOCKS - 1)
-        bomb_y = randint(0, HEIGHT_IN_BLOCKS - 1)
+        bomb_x = randint(2, WIDTH_IN_BLOCKS - 1)
+        bomb_y = randint(2, HEIGHT_IN_BLOCKS - 1)
 
     bomb_r = randint(3, 7)
     return Bomb(bomb_x, bomb_y, bomb_r)
@@ -214,8 +215,11 @@ def tick(artificial=False):
 
     if paused:
         return
+    left_time = int(time.time()) - start_time
+    print(left_time)
+    print(bombs)
 
-    if randint(0, 20) == 0 and len(bombs) <= 1:
+    if (left_time // 5 - left_time / 5 == 0 or left_time // 5 - left_time / 5 == 0.0) and not artificial and len(bombs) == 0:
         bombs.append(generate_bomb())
 
     if tile.collision(field):
@@ -274,5 +278,8 @@ def tick(artificial=False):
 
 window.bind_all("<Key>", eventListener)
 tile = generateTile()
+
+start_time = int(time.time())
+tick()
 
 window.mainloop()
