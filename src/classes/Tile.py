@@ -116,7 +116,8 @@ class Tile:
         nextBody = self.bodies[next_turn]
 
         for block in nextBody:
-            if block.x > WIDTH_IN_BLOCKS-1 or block.x < 0 or block.y > HEIGHT_IN_BLOCKS-1 or block.y < 0:  # If block out of field
+            if block.x > WIDTH_IN_BLOCKS-1 or block.x < 0 or block.y > HEIGHT_IN_BLOCKS-1 or block.y < 0:  # If block
+                # out of field
                 return False
             elif field[block.y][block.x] == 1:  # If block in built
                 return False

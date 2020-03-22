@@ -76,7 +76,8 @@ def pause():
         pause_bg = c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")
         pause_text = c.create_text(C_WIDTH / 2, C_HEIGHT / 2, text="PAUSED", font=("Helvetica", 30), fill="green")
         paused = True
-    tick()
+
+    tick(True)
 
 
 def show_score():
@@ -105,6 +106,7 @@ def generate_bomb():
     while block == 1 or block == 2 or block == 3:
         bomb_x = randint(2, WIDTH_IN_BLOCKS - 1)
         bomb_y = randint(2, HEIGHT_IN_BLOCKS - 1)
+        block = field[bomb_y][bomb_x]
 
     bomb_r = randint(3, 7)
     return Bomb(bomb_x, bomb_y, bomb_r)
@@ -161,9 +163,9 @@ def redraw():
     for i_y in range(len(field)):
         for i_x in range(len(field[i_y])):
             num = field[i_y][i_x]
-            colour = COLOURS[num]
+            fill_colour = COLOURS[num]
             stroke_colour = STROKE_COLOURS[num]
-            c.itemconfig(field_ids[i_y][i_x], fill=colour, outline=stroke_colour)
+            c.itemconfig(field_ids[i_y][i_x], fill=fill_colour, outline=stroke_colour)
     show_score()
 
 
@@ -176,7 +178,7 @@ def updateField():
                 field[i_y][i_x] = 0
 
     for bomb in bombs:
-        field[bomb.body.y][bomb.body.x] = 3
+        field[bomb.get_body().y][bomb.get_body().x] = 3
 
     for block in tile.body:
         field[block.y][block.x] = 2
@@ -214,12 +216,15 @@ def tick(artificial=False):
     global bombs
 
     if paused:
+        t = Timer(0.5, tick)
+        t.start()
         return
-    left_time = int(time.time()) - start_time
-    print(left_time)
-    print(bombs)
+    if game_over:
+        return
 
-    if (left_time // 5 - left_time / 5 == 0 or left_time // 5 - left_time / 5 == 0.0) and not artificial and len(bombs) == 0:
+    left_time = int(time.time()) - start_time
+
+    if (left_time // 5 - left_time / 5 == 0 or left_time // 5 - left_time / 5 == 0.0) and not artificial and len(bombs) == 0 and randint(0, 2) == 0:
         bombs.append(generate_bomb())
 
     if tile.collision(field):
@@ -251,8 +256,8 @@ def tick(artificial=False):
 
                 record_dict = update_record_dict(records)
 
-                with open(RECORD_FILE, "w") as file_object:
-                    json.dump(record_dict, file_object)
+                with open(RECORD_FILE, "w") as file_obj:
+                    json.dump(record_dict, file_obj)
 
                 return
         updateField()
@@ -283,3 +288,4 @@ start_time = int(time.time())
 tick()
 
 window.mainloop()
+game_over = True
