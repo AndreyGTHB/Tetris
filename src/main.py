@@ -77,8 +77,6 @@ def pause():
         pause_text = c.create_text(C_WIDTH / 2, C_HEIGHT / 2, text="PAUSED", font=("Helvetica", 30), fill="green")
         paused = True
 
-    tick(True)
-
 
 def show_score():
     c.itemconfig(score_text, text=score)
@@ -224,7 +222,7 @@ def tick(artificial=False):
 
     left_time = int(time.time()) - start_time
 
-    if (left_time // 5 - left_time / 5 == 0 or left_time // 5 - left_time / 5 == 0.0) and not artificial and len(bombs) == 0 and randint(0, 2) == 0:
+    if (left_time // 5 - left_time / 5 == 0 or left_time // 5 - left_time / 5 == 0.0) and not artificial and len(bombs) == 0 and randint(0, 4) == 0:
         bombs.append(generate_bomb())
 
     if tile.collision(field):
