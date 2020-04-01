@@ -3,12 +3,26 @@ from threading import Timer
 from random import randint
 import time
 import json
+import yadisk
 
 from classes.Shapes import *
 from settings import *
 from classes.Bomb import Bomb
 
+
 # Загрузка рекордов
+def download_records():
+    disk.download("/records.json", "records.json")
+
+
+def push_records():
+    disk.remove("/records.json", permanently=True)
+    disk.upload("records.json", "/records.json")
+
+
+disk = yadisk.YaDisk(YD_ID, YD_SECRET, YD_TOKEN)
+download_records()
+
 record_dict = {1: 1}
 with open(RECORD_FILE, "r") as file_object:
     record_dict = json.load(file_object)
@@ -256,6 +270,7 @@ def tick(artificial=False):
 
                 with open(RECORD_FILE, "w") as file_obj:
                     json.dump(record_dict, file_obj)
+                push_records()
 
                 return
         updateField()

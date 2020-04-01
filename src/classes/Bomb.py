@@ -4,7 +4,7 @@ from math import sqrt
 
 
 class Bomb:
-    def __init__(self, x: int, y: int, radius: int) -> object:
+    def __init__(self, x: int, y: int, radius: int):
         self.exploded = False
 
         self.__body = Point(x, y)

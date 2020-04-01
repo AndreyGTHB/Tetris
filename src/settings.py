@@ -14,3 +14,8 @@ STROKE_COLOURS = ("lightblue", "black", "black", "black")
 
 
 RECORD_FILE = "records.json"
+
+# YaDisk
+YD_ID = "4191264719824131aabb9b31192a8e8d"
+YD_SECRET = "bc75f9c7eba4442db73f76eec7d9b7c6"
+YD_TOKEN = "AgAAAAA-TyNOAAY5GNxFJzPLVklhlFZizdFW1Xg"
