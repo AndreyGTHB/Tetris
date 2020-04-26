@@ -5,76 +5,29 @@ import time
 import json
 import yadisk
 
+
+from classes.Bomb import *
 from classes.Shapes import *
 from settings import *
-from classes.Bomb import Bomb
 
 
 # Загрузка рекордов
 def download_records():
-    disk.download("/records.json", "records.json")
+    records = json.load(open('records.json', 'r'))
+    try:
+        drive.download("/records.json", "records.json")
+    except:
+        with open('records.json', 'w') as file:
+            json.dump(records, file)
+        print('Can not download records')
 
 
 def push_records():
-    disk.remove("/records.json", permanently=True)
-    disk.upload("records.json", "/records.json")
-
-
-disk = yadisk.YaDisk(YD_ID, YD_SECRET, YD_TOKEN)
-download_records()
-
-record_dict = {1: 1}
-with open(RECORD_FILE, "r") as file_object:
-    record_dict = json.load(file_object)
-records = list(record_dict.items())
-
-player_name = input("What is your name?")
-if player_name == "":
-    anonymouses = 0
-    for key in record_dict:
-        if "Anonymous" in key:
-            anonymouses += 1
-    player_name = "Anonymous" + str(anonymouses + 1)
-
-
-def fitness(item):
-    return item[1]
-
-
-window = Tk()
-window.title("Tetris")
-
-c = Canvas(window, width=C_WIDTH, height=C_HEIGHT)
-c.pack()
-
-background = c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")
-
-score = 0
-
-game_over = False
-
-paused = False
-pause_bg = None
-pause_text = None
-
-field = []
-field_ids = []
-for str in range(HEIGHT_IN_BLOCKS):
-    field_ids.append([])
-    field.append([])
-    y = TILE_SIZE * str
-    for clmn in range(WIDTH_IN_BLOCKS):
-        x = TILE_SIZE * clmn
-        padding = 3
-        colour = COLOURS[0]
-        field_ids[str].append(
-            c.create_rectangle(x, y, x + TILE_SIZE - padding, y + TILE_SIZE - padding, fill=colour, outline=STROKE_COLOURS[0]))
-        field[str].append(0)
-bombs = list()
-
-c.create_text(30, 10, text="SCORE:", fill="white")
-
-score_text = c.create_text(61, 10, fill="white")
+    try:
+        drive.remove("/records.json", permanently=True)
+        drive.upload("records.json", "/records.json")
+    except:
+        print('Can not push records')
 
 
 def pause():
@@ -236,7 +189,8 @@ def tick(artificial=False):
 
     left_time = int(time.time()) - start_time
 
-    if (left_time // 5 - left_time / 5 == 0 or left_time // 5 - left_time / 5 == 0.0) and not artificial and len(bombs) == 0 and randint(0, 4) == 0:
+    if (left_time // 5 - left_time / 5 == 0 or left_time // 5 - left_time / 5 == 0.0) and not artificial and len(
+            bombs) == 0 and randint(0, 4) == 0:
         bombs.append(generate_bomb())
 
     if tile.collision(field):
@@ -293,6 +247,68 @@ def tick(artificial=False):
         t = Timer(0.5, tick)
         t.start()
 
+
+drive = None
+try:
+    drive = yadisk.YaDisk(YD_ID, YD_SECRET, YD_TOKEN)
+except:
+    print('No connection')
+download_records()
+
+
+record_dict = {1: 1}
+with open(RECORD_FILE, "r") as file_object:
+    record_dict = json.load(file_object)
+records = list(record_dict.items())
+
+player_name = input("What is your name?")
+if player_name == "":
+    ananymouses = 0
+    for key in record_dict:
+        if "Anonymous" in key:
+            ananymouses += 1
+    player_name = "Anonymous" + str(ananymouses + 1)
+
+
+def fitness(item):
+    return item[1]
+
+
+window = Tk()
+window.title("Tetris")
+
+c = Canvas(window, width=C_WIDTH, height=C_HEIGHT)
+c.pack()
+
+background = c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")
+
+score = 0
+
+game_over = False
+
+paused = False
+pause_bg = None
+pause_text = None
+
+field = []
+field_ids = []
+for str in range(HEIGHT_IN_BLOCKS):
+    field_ids.append([])
+    field.append([])
+    y = TILE_SIZE * str
+    for clmn in range(WIDTH_IN_BLOCKS):
+        x = TILE_SIZE * clmn
+        padding = 3
+        colour = COLOURS[0]
+        field_ids[str].append(
+            c.create_rectangle(x, y, x + TILE_SIZE - padding, y + TILE_SIZE - padding, fill=colour,
+                               outline=STROKE_COLOURS[0]))
+        field[str].append(0)
+bombs = list()
+
+c.create_text(30, 10, text="SCORE:", fill="white")
+
+score_text = c.create_text(61, 10, fill="white")
 
 window.bind_all("<Key>", eventListener)
 tile = generateTile()
