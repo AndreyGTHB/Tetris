@@ -5,7 +5,6 @@ import time
 import json
 import yadisk
 
-
 from classes.Bomb import *
 from classes.Shapes import *
 from settings import *
@@ -30,7 +29,7 @@ def push_records():
         print('Can not push records')
 
 
-def pause():
+def pause(): # Add argument (pause/unpause)
     global paused
     global pause_bg
     global pause_text
@@ -94,13 +93,10 @@ def check_bomb_collision():
 
 def eventListener(event):
     global paused
-    global bombs
-    global field
     global score
 
     if game_over:
         return
-    run_listener = True
 
     key = event.keysym
 
@@ -135,8 +131,6 @@ def redraw():
 
 
 def updateField():
-    global field
-
     for i_y in range(len(field)):
         for i_x in range(len(field[i_y])):
             if field[i_y][i_x] == 2 or field[i_y][i_x] == 3:
@@ -190,7 +184,7 @@ def tick(artificial=False):
     left_time = int(time.time()) - start_time
 
     if (left_time // 5 - left_time / 5 == 0 or left_time // 5 - left_time / 5 == 0.0) and not artificial and len(
-            bombs) == 0 and randint(0, 4) == 0:
+            bombs) == 0 and randint(0, 6) == 0:
         bombs.append(generate_bomb())
 
     if tile.collision(field):
