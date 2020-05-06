@@ -15,7 +15,8 @@ game_state = GameState()
 
 # Загрузка рекордов
 def download_records():
-    records = json.load(open('records.json', 'r'))
+    records = {"k": "v"}
+    records.clear()
     try:
         game_state.drive.download("/records.json", "records.json")
     except:
@@ -259,7 +260,7 @@ def main(*args):
         for key in game_state.record_dict:
             if "Anonymous" in key:
                 ananymouses += 1
-        player_name = "Anonymous" + str(ananymouses + 1)
+        game_state.player_name = "Anonymous" + str(ananymouses + 1)
 
     window = Tk()
     window.title("Tetris")
@@ -267,7 +268,7 @@ def main(*args):
     game_state.c = Canvas(window, width=C_WIDTH, height=C_HEIGHT)
     game_state.c.pack()
 
-    game_state.c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue") # Background
+    game_state.c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")  # Background
 
     for str in range(HEIGHT_IN_BLOCKS):
         game_state.field_ids.append([])
@@ -296,4 +297,5 @@ def main(*args):
     game_state.game_over = True
 
 
-main()
+if __name__ == "__main__":
+    main()
