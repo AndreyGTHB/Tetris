@@ -15,8 +15,7 @@ game_state = GameState()
 
 # Загрузка рекордов
 def download_records():
-    records = {"k": "v"}
-    records.clear()
+    records = {}
     try:
         game_state.drive.download("/records.json", "records.json")
     except:
@@ -33,19 +32,18 @@ def push_records():
         print('Can not push records')
 
 
-def pause():  # Add argument (pause/unpause)
+def pause(state):  # TODO: Add argument (pause/unpause)
     global game_state
-
+    game_state.paused = pause
+    
     if game_state.paused:
-        game_state.c.itemconfig(game_state.pause_bg, state=HIDDEN)
-        game_state.c.itemconfig(game_state.pause_text, state=HIDDEN)
-        game_state.paused = False
-    else:
         game_state.pause_bg = game_state.c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")
         game_state.pause_text = game_state.c.create_text(C_WIDTH / 2, C_HEIGHT / 2, text="PAUSED",
                                                          font=("Helvetica", 30), fill="green")
-        game_state.paused = True
-
+    else:
+        game_state.c.itemconfig(game_state.pause_bg, state=HIDDEN)
+        game_state.c.itemconfig(game_state.pause_text, state=HIDDEN)
+        
 
 def show_score():
     game_state.c.itemconfig(game_state.score_text, text=game_state.score)
@@ -102,7 +100,7 @@ def eventListener(event):
     key = event.keysym
 
     if key == "q":
-        pause()
+        pause(not game_state.paused)
     elif game_state.paused:
         return
 
