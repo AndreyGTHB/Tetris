@@ -1,53 +1,16 @@
-from classes.Point import *
 from settings import *
 
 
 class Tile:
 
-    def __init__(self, canvas, shape, cell):
+    def __init__(self, cell):
         self.tile_ids = list()
         self.cellLen = cell
 
         self.current_turn = 0
-        if shape == "sq":
-            self.body = [
-                Point(0, 0),
-                Point(1, 0),
-                Point(0, 1),
-                Point(1, 1)
-            ]
-        elif shape == "prg":
-            self.body = [
-                Point(0, 1),
-                Point(1, 1),
-                Point(1, 0),
-                Point(2, 0)
-            ]
-        elif shape == "ln":
-            self.body = [
-                Point(0, 0),
-                Point(1, 0),
-                Point(2, 0),
-                Point(3, 0)
-            ]
-        elif shape == "ltr":
-            self.body = [
-                Point(0, 1),
-                Point(1, 1),
-                Point(2, 1),
-                Point(2, 0)
-            ]
-        elif shape == "tbl":
-            self.body = [
-                Point(0, 1),
-                Point(1, 1),
-                Point(2, 1),
-                Point(1, 0)
-            ]
-        else:
-            raise ValueError("'" + shape + "'", "is not a shape")
 
-        self.bodies = [self.body]
+        self.body = []
+        self.bodies = [[]]
 
     def fall(self):
         for body in range(len(self.bodies)):

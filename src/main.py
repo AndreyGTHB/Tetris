@@ -32,18 +32,18 @@ def main(*args):
 
     game_state.c.create_rectangle(0, 0, C_WIDTH, C_HEIGHT, fill="lightblue")  # Background
 
-    for str in range(HEIGHT_IN_BLOCKS):
+    for string in range(HEIGHT_IN_BLOCKS):
         game_state.field_ids.append([])
         game_state.field.append([])
-        y = TILE_SIZE * str
+        y = TILE_SIZE * string
         for clmn in range(WIDTH_IN_BLOCKS):
             x = TILE_SIZE * clmn
             padding = 3
             colour = COLOURS[0]
-            game_state.field_ids[str].append(
+            game_state.field_ids[string].append(
                 game_state.c.create_rectangle(x, y, x + TILE_SIZE - padding, y + TILE_SIZE - padding, fill=colour,
                                               outline=STROKE_COLOURS[0]))
-            game_state.field[str].append(0)
+            game_state.field[string].append(0)
 
     game_state.c.create_text(30, 10, text="SCORE:", fill="white")
 

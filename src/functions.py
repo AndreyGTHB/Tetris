@@ -47,14 +47,14 @@ def show_score():
 def generateTile():
     newT = randint(1, 5)
     if newT == 1:
-        return Sq(game_state.c, TILE_SIZE)
+        return Sq(TILE_SIZE)
     elif newT == 2:
-        return Prg(game_state.c, TILE_SIZE)
+        return Prg(TILE_SIZE)
     elif newT == 3:
-        return Ln(game_state.c, TILE_SIZE)
+        return Ln(TILE_SIZE)
     elif newT == 4:
-        return Ltr(game_state.c, TILE_SIZE)
-    return Tbl(game_state.c, TILE_SIZE)
+        return Ltr(TILE_SIZE)
+    return Tbl(TILE_SIZE)
 
 
 def generate_bomb():
