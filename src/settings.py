@@ -1,5 +1,3 @@
-from GameState import GameState
-
 WIDTH_IN_BLOCKS = 10
 HEIGHT_IN_BLOCKS = 12
 TILE_SIZE = 50
@@ -22,5 +20,3 @@ YD_ID = "4191264719824131aabb9b31192a8e8d"
 YD_SECRET = "bc75f9c7eba4442db73f76eec7d9b7c6"
 YD_TOKEN = "AgAAAAA-TyNOAAY5GNxFJzPLVklhlFZizdFW1Xg"
 
-
-game_state = GameState()
