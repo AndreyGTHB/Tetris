@@ -5,7 +5,6 @@ import time
 import json
 from classes.Bomb import *
 from classes.Shapes import *
-from libsForGame import *
 from settings import *
 
 
@@ -15,7 +14,6 @@ class Game:
     c = None
     score_text = None
 
-    drive = None
 
     game_over = False
     start_time = None
@@ -201,7 +199,6 @@ class Game:
 
                     with open(RECORD_FILE, "w") as file_obj:
                         json.dump(self.record_dict, file_obj)
-                    utils.push_records()
 
                     return
             self.updateField()

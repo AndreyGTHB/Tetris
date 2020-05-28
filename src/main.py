@@ -5,12 +5,12 @@ from game import *
 
 
 def main(*args):
-    global game
+    drive = None
     try:
-        game.drive = yadisk.YaDisk(YD_ID, YD_SECRET, YD_TOKEN)
+        drive = yadisk.YaDisk(YD_ID, YD_SECRET, YD_TOKEN)
     except:
         print('No connection')
-    download_records()
+    download_records(drive)
 
     with open(RECORD_FILE, "r") as file_object:
         game.record_dict = json.load(file_object)
@@ -56,6 +56,7 @@ def main(*args):
     game.tick()
 
     window.mainloop()
+    push_records(drive)
     game.game_over = True
 
 
